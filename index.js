@@ -26,6 +26,13 @@ client.connect(err => {
             res.send(documents)
         })
     })
+
+    app.get("/vservice/:id", (req, res) => {
+      volunteerCollections.find({_id: ObjectID(req.params.id)})
+      .toArray((err, documents) =>{
+        res.send(documents[0]);
+      })
+    })
 });
 
 

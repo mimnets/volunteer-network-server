@@ -17,6 +17,8 @@ const port = 3001
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true});
 client.connect(err => {
   const volunteerCollections = client.db('volunteerNetwork').collection('volunteerServices');
+  const usersCollections = client.db('volunteerNetwork').collection('users');
+  const activitiesCollections = client.db('volunteerNetwork').collection('activites'); 
   // perform actions on the collection object
     app.get("/home", (req, res) => {
         volunteerCollections.find({})
@@ -31,6 +33,14 @@ client.connect(err => {
       volunteerCollections.find({_id: ObjectID(req.params.id)})
       .toArray((err, documents) =>{
         res.send(documents[0]);
+      })
+    })
+
+    app.post("/addUser", (req, res) =>{
+      const user = req.body;
+      usersCollections.insertOne(user)
+      .then(result =>{
+        console.log('register successfully')
       })
     })
 });

@@ -80,22 +80,13 @@ client.connect(err => {
         // console.log('register successfully')
         res.send(result.insertedCount > 0);
       })
-      res.redirect('/');
     })
 
     app.delete("/delete/:id", (req, res) =>{
-      console.log(req.params.id);
+      // console.log(req.params.id);
       usersCollections.deleteOne({_id: req.params.id})
       .then(result =>{
         res.send(result);
-      })
-      console.log(user)
-    })
-
-    app.delete("/delete/:id", (req, res) => {
-      usersCollections.deleteOne({_id: ObjectID(req.params.id)})
-      .then(result =>{
-        res.send(result.deletedCount > 0);
       })
     })
 

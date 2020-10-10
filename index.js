@@ -36,11 +36,27 @@ client.connect(err => {
       })
     })
 
+    app.get("/events", (req, res) => {
+      usersCollections.find({})
+      .toArray((err, documents) =>{
+        res.send(documents);
+      })
+    })
+
     app.post("/addUser", (req, res) =>{
       const user = req.body;
       usersCollections.insertOne(user)
       .then(result =>{
         console.log('register successfully')
+      })
+      res.redirect('/');
+    })
+
+    app.delete("/delete/:id", (req, res) =>{
+      console.log(req.params.id);
+      usersCollections.deleteOne({_id: req.params.id})
+      .then(result =>{
+        res.send(result);
       })
     })
 });

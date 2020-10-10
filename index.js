@@ -4,6 +4,15 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 require('dotenv').config();
 const ObjectID = require('mongodb').ObjectID;
+const admin = require('firebase-admin')
+
+
+var serviceAccount = require("./mimnets-volunteer-network-firebase-adminsdk-98u2u-672805e40b.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://mimnets-volunteer-network.firebaseio.com"
+});
 
 
 const app = express()
@@ -43,11 +52,33 @@ client.connect(err => {
       })
     })
 
+    // app.get("/events", (req, res) => {
+    //   const bearer = req.headers.authorization;
+    //   if(bearer && bearer.startsWith('Bearer ')){
+    //     const idToken = bearer.split(' ')[1];
+    //     console.log(idToken);
+    //     admin.auth().verifyIdToken(idToken)
+    //     .then(function(decodedToken) {
+    //       const tokenEmail = decodedToken.email;
+    //       const queryEmail = request.query.email;
+    //       if(tokenEmail == queryEmail) {
+    //         usersCollections.find({email: req.query.email})
+    //         .toArray((err, documents) =>{
+    //           res.send(documents);
+    //         })
+    //       }
+    //     }).catch(function(err){
+
+    //     });
+    //   }
+    // })
+
     app.post("/addUser", (req, res) =>{
       const user = req.body;
       usersCollections.insertOne(user)
       .then(result =>{
-        console.log('register successfully')
+        // console.log('register successfully')
+        res.send(result.insertedCount > 0);
       })
       res.redirect('/');
     })
@@ -58,7 +89,16 @@ client.connect(err => {
       .then(result =>{
         res.send(result);
       })
+      console.log(user)
     })
+
+    app.delete("/delete/:id", (req, res) => {
+      usersCollections.deleteOne({_id: ObjectID(req.params.id)})
+      .then(result =>{
+        res.send(result.deletedCount > 0);
+      })
+    })
+
 });
 
 

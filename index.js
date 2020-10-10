@@ -4,15 +4,6 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 require('dotenv').config();
 const ObjectID = require('mongodb').ObjectID;
-const admin = require('firebase-admin')
-
-
-var serviceAccount = require("./mimnets-volunteer-network-firebase-adminsdk-98u2u-672805e40b.json");
-
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://mimnets-volunteer-network.firebaseio.com"
-});
 
 
 const app = express()
